@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 23, 2017 3:52:22 PM by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="examples.pubhub.model.BookList" table="BOOKLIST">
+        <id name="isbn_13" type="java.lang.String">
+            <column name="ISBN_13" />
+            <generator class="assigned" />
+        </id>
+        <one-to-one name="book" class="examples.pubhub.model.Book"></one-to-one>
+        <property name="purchase_date" type="java.time.LocalDate">
+            <column name="PURCHASE_DATE" />
+        </property>
+    </class>
+</hibernate-mapping>
