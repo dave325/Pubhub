@@ -79,7 +79,7 @@ public class BookTagsDAOImpl extends BookDAOImpl implements BookTagsDAO {
 		}
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
-		String hql = "FROM Tags WHERE ISBN_13 =:isbn";
+		String hql = "FROM BookTags WHERE isbn13 =:isbn";
 		Query query = session.createQuery(hql);
 		query.setParameter("isbn", isbn);
 		List<BookTags> books = query.getResultList();
@@ -99,7 +99,7 @@ public class BookTagsDAOImpl extends BookDAOImpl implements BookTagsDAO {
 
 	@Override
 	public BookTags getTags(String isbn) {
-		BookTags bookTag = null;
+		//BookTags bookTag = null;
 		try {
 			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
 		} catch (Exception e) {
@@ -112,18 +112,14 @@ public class BookTagsDAOImpl extends BookDAOImpl implements BookTagsDAO {
 		}
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
-		String hql = "SELECT tags.tags FROM BookTags tags where tags.ISBN13=:isbn";
+		String hql = "FROM BookTags tags where tags.isbn13=:isbn";
 		Query query = session.createQuery(hql);
 		query.setParameter("isbn", isbn);
-		List<BookTags> tags = query.getResultList();
-		for(BookTags b: tags){
-			bookTag.setTags(b.getTags());
-			bookTag.setTitle(b.getTitle());
-		}
+		BookTags tags = (BookTags) query.getSingleResult();
 		log.setLevel(Level.INFO);
-		log.info("Returned: " + bookTag.getTitle() + ". The tags are  '" + bookTag.getTags() + " '");
+		log.info("Returned: " + tags.getTitle() + ". The tags are  '" + tags.getTags() + " '");
 		session.close();
-		return bookTag;
+		return tags;
 	}
 
 	/*------------------------------------------------------------------------------------------------*/
@@ -142,48 +138,33 @@ public class BookTagsDAOImpl extends BookDAOImpl implements BookTagsDAO {
 		}
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
-			String tagResults = "Select tags.tags From BookTags tags Where tags.ISBN13=:tagsIsbn";
-			String sql = "Update BookTags tags SET tags.tags=:tags Where tags.ISBN13=:isbn"; 
+			String tagResults = "From BookTags tags Where tags.isbn13=:tagsIsbn";
+			String sql = "Update BookTags tag SET tag.tags=:tags Where tags.isbn13=:isbn"; 
 			String updatedTags = null;
 			Query query = session.createQuery(tagResults);
 			Query query1 = session.createQuery(sql);
 			query.setParameter("tagsIsbn", bookTag.getIsbn13());
 			query1.setParameter("isbn", bookTag.getIsbn13());
-			/*if(query.executeUpdate() != 0){
-				session.getTransaction().commit();
-				session.close();
-				log.setLevel(Level.INFO);
-				log.info("addTag() returned true" );
-				return true;
-			}else{
-				session.close();
-				log.setLevel(Level.INFO);
-				log.info("addTag() returned false" );
-				return false;
-			}*/
 			String newTagList = "";
-			List<BookTags> tags = query.getResultList();
-			//ResultSet rs = stmt.executeQuery();
+			BookTags tags = (BookTags) query.getSingleResult();
+			String getTags = tags.getTags();
 			List<String> updateTagList = Arrays.asList(bookTag.getTags().split("\\s*,\\s*"));
-			for(BookTags b: tags){
-				String getTags = b.getTags();
-				if (getTags != null) {
-					List<String> tagList = Arrays.asList(getTags.split("\\s*,\\s*"));
-					for (String s: updateTagList) {
-						if (tagList.contains(s)) {
-							newTagList += "";
-						} else {
-							newTagList += s + ", ";
-						}
-					}
-					if (newTagList != "") {
-						updatedTags = newTagList + tags;
+			if (getTags != null) {
+				List<String> tagList = Arrays.asList(getTags.split("\\s*s,\\s*"));
+				for (String s: updateTagList) {
+					if (tagList.contains(s)) {
+						newTagList += "";
 					} else {
-						updatedTags = getTags;
+						newTagList += s + ", ";
 					}
-				} else {
-					updatedTags = bookTag.getTags();
 				}
+				if (newTagList != "") {
+					updatedTags = newTagList + getTags;
+				} else {
+					updatedTags = getTags;
+				}
+			} else {
+				updatedTags = bookTag.getTags();
 			}
 			query1.setParameter("tags", updatedTags);
 			if (query1.executeUpdate() != 0){
@@ -198,46 +179,6 @@ public class BookTagsDAOImpl extends BookDAOImpl implements BookTagsDAO {
 				session.close();
 				return false;
 			}
-				
-			/*if (rs.next()) {
-				//String tags = rs.getString("tags");
-				if (tags != null) {
-					List<String> tagList = Arrays.asList(tags.split("\\s*,\\s*"));
-					for (int i = 0; i < updateTagList.size(); i += 1) {
-						if (tagList.contains(updateTagList.get(i))) {
-							newTagList += "";
-						} else {
-							newTagList += updateTagList.get(i) + ", ";
-						}
-					}
-					if (newTagList != "") {
-						updatedTags = newTagList + tags;
-					} else {
-						updatedTags = tags;
-					}
-				} else {
-					updatedTags = bookTag.getTags();
-				}
-				updatedstmt.setString(1, updatedTags);
-				if (updatedstmt.executeUpdate() != 0) {
-					return true;
-				} else {
-					return false;
-				}
-			} else {
-				return false;
-			// If we were able to add our book to the DB, we want to return
-			// true.
-			// This if statement both executes our query, and looks at the
-			// return
-			// value to determine how many rows were changed
-
-		/*} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		} finally {
-			closeResources();
-		}*/
 	}
 	
 	/*------------------------------------------------------------------------------------------------*/
@@ -256,8 +197,8 @@ public class BookTagsDAOImpl extends BookDAOImpl implements BookTagsDAO {
 		}
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
-		String sql = "Select tags.tags From BookTags tags Where tags.ISBN13=:isbn "; 
-		String updatesql = "Update BookTags SET tags=:tags Where ISBN13=:isbn "; 
+		String sql = "From BookTags tags Where tags.isbn13=:isbn "; 
+		String updatesql = "Update BookTags SET tags=:tags Where isbn13=:isbn "; 
 			String newTagList = "";
 			String updateList = null;
 			Query query = session.createQuery(sql);

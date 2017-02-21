@@ -60,6 +60,10 @@
 		    </div>
 		  </div>
 		</form>
+		<p>
+			
+			Tags for the book are: ${bookTags.tags}
+		</p>
 		<form action="UpdateBookTags" method="post" class="form-horizontal">
 		 <input type="hidden" class="form-control" id="isbn13" name="isbn13" required="required" value="${book.isbn13 }" />
 		  <div class="form-group">

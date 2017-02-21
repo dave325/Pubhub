@@ -36,13 +36,12 @@ public class ViewBookDetailsServlet extends HttpServlet {
 		// Otherwise it won't know what details to display. Ergo, we need to fetch those details before we
 		// Actually redirect the user.
 		String isbn13 = request.getParameter("isbn13");
-		
 		BookDAO dao = DAOUtilities.getBookDAO();
-		//BookTagsDAO tagsdao = DAOUtilities.getBookTagDAO();
+		BookTagsDAO tagsdao = DAOUtilities.getBookTagDAO();
 		Book book = dao.getBookByISBN(isbn13);
-		//BookTags bookTags = tagsdao.getBookTagsByISBN(isbn13);
+		BookTags bookTags = tagsdao.getBookTagsByISBN(isbn13);
 		request.setAttribute("book", book); // retrieve books to use for later
-		//request.setAttribute("booktags", bookTags);// retrieve book tags to use for later
+		request.setAttribute("bookTags", bookTags);// retrieve book tags to use for later
 		
 		
 		// We can use a forward here, because if a user wants to refresh their browser on this page,
