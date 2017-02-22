@@ -3,6 +3,7 @@ package examples.pubhub.servlets;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,8 +23,10 @@ public class MarketPlaceServlet extends HttpServlet {
 			protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 				// Grab the list of Books from the Database
+				ServletContext context = request.getServletContext();
+				String username = (String) context.getAttribute("activeAccount");
 				UserDAO dao = DAOUtilities.getUserDAO();
-				List<BookList> bookList = dao.viewBooks();
+				List<BookList> bookList = dao.viewBooks(username);
 
 				// Populate the list into a variable that will be stored in the session
 				request.getSession().setAttribute("books", bookList);

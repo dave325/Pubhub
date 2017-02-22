@@ -27,7 +27,7 @@ public class BookList{
 		private PurchasedBook purchaseBook;
 		@Column
 		private LocalDate purchase_date;	// Date of purchase to the website
-
+		
 		// Default constructor
 		public BookList() {
 			this.isbn_13 = null;

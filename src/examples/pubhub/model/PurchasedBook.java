@@ -2,6 +2,7 @@ package examples.pubhub.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -20,7 +21,10 @@ public class PurchasedBook {
 	@OneToOne
 	@JoinColumn(name="isbn_13")
 	private BookList purchasedBook;
-
+	@OneToOne(cascade = CascadeType.ALL, mappedBy="user")
+	private Users user;
+	@Column
+	private String username;
 	// Default constructor
 	public PurchasedBook() {
 		this.isbn_13 = null;
@@ -44,6 +48,14 @@ public class PurchasedBook {
 	}
 	public BookList getPurchasedBook() {
 		return purchasedBook;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public void setPurchasedBook(BookList purchasedBook) {

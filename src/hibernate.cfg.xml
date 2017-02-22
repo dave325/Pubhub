@@ -18,10 +18,12 @@
         <property name="hibernate.show_sql">true</property>
 		 
 		<mapping class="examples.pubhub.model.Book"/>
+		<mapping class="examples.pubhub.model.BookTags"/>
 		<mapping class="examples.pubhub.model.ShoppingCart"/>
 		<mapping class="examples.pubhub.model.PurchasedBook"/>
 		<mapping class="examples.pubhub.model.OrderHistory"/>
 		<mapping class="examples.pubhub.model.BookList"/>
+		<mapping class="examples.pubhub.model.Users"/>
     </session-factory>
 
 </hibernate-configuration>

@@ -20,6 +20,7 @@ public class ShoppingCart {
 	@Column
 	private LocalDate purchase_date;
 	
+	
 	public ShoppingCart(String isbn_13, Double price){
 		this.isbn_13 = isbn_13;
 		this.price = price;

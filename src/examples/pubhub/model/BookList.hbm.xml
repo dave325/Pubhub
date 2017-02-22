@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated Jan 23, 2017 3:52:22 PM by Hibernate Tools 3.5.0.Final -->
+<!-- Generated Feb 22, 2017 4:00:17 PM by Hibernate Tools 3.5.0.Final -->
 <hibernate-mapping>
     <class name="examples.pubhub.model.BookList" table="BOOKLIST">
         <id name="isbn_13" type="java.lang.String">
@@ -9,6 +9,16 @@
             <generator class="assigned" />
         </id>
         <one-to-one name="book" class="examples.pubhub.model.Book"></one-to-one>
+        <property name="title" type="java.lang.String">
+            <column name="TITLE" />
+        </property>
+        <property name="author" type="java.lang.String">
+            <column name="AUTHOR" />
+        </property>
+        <property name="price" type="double">
+            <column name="PRICE" />
+        </property>
+        <one-to-one name="purchaseBook" class="examples.pubhub.model.PurchasedBook" access="field"></one-to-one>
         <property name="purchase_date" type="java.time.LocalDate">
             <column name="PURCHASE_DATE" />
         </property>

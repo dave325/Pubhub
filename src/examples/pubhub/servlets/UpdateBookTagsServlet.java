@@ -28,12 +28,12 @@ public class UpdateBookTagsServlet extends HttpServlet {
 		String tags = request.getParameter("booktags");
 		BookTagsDAO tagsdao = DAOUtilities.getBookTagDAO();
 		BookTags bookTags = new BookTags();
-		BookTags book = tagsdao.getTags(isbn13);
-		if(book != null){
-				bookTags.setIsbn13(isbn13);
-				bookTags.setTags(tags);
-				request.setAttribute("bookTags", bookTags);
-				isSuccess = tagsdao.addTag(bookTags);
+		bookTags.setIsbn13(isbn13);
+		bookTags.setTags(tags);
+		isSuccess = tagsdao.addTag(bookTags);
+		if(isSuccess){
+				request.getSession().setAttribute("bookTags", bookTags);
+				isSuccess = true;
 		}else {
 			//ASSERT: couldn't find book with isbn. Update failed.
 			isSuccess = false;
