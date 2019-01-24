@@ -17,7 +17,7 @@ import oracle.jdbc.driver.OracleDriver;
  */
 public class DAOUtilities {
 
-	private static final String CONNECTION_PASSWORD = "Pachi92813";
+	private static final String CONNECTION_PASSWORD = "";
 	private static final String CONNECTION_USERNAME = "dave325";
 	private static final String URL = "jdbc:oracle:thin:@localhost:1521:xe";
 	private static Connection connection;
